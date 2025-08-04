@@ -5,9 +5,9 @@ COPY package*.json ./
 RUN npm install --production
 COPY . .
 
-ENV DATABASE_URL="postgresql://postgres:Hellomyfriend@focus-property-fe-rds.crmyeocekssj.ap-southeast-1.rds.amazonaws.com:5432/focus?schema=public" # Replace with your actual database URL
+ENV DATABASE_URL="postgresql://postgres:Hellomyfriend@focus-property-fe-rds.crmyeocekssj.ap-southeast-1.rds.amazonaws.com:5432/focus?schema=public"
 RUN npx prisma generate
-RUN npx prisma migrate deploy # Or npx prisma migrate dev --name init --create-only if creating migrations
+RUN npx prisma migrate deploy
 
 RUN npm install -g pnpm
 RUN pnpm install
