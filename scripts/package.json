@@ -1,0 +1,30 @@
+{
+  "name": "focus-property-backend",
+  "version": "1.0.0",
+  "description": "Node.js backend for Focus Property website",
+  "type": "module",
+  "main": "property-api-server.js",
+  "scripts": {
+    "start": "node property-api-server.js",
+    "dev": "node --watch property-api-server.js",
+    "seed": "node database-seeder.js",
+    "test-email": "node email-service.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "nodemailer": "^6.9.7",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5",
+    "helmet": "^7.1.0",
+    "rate-limiter-flexible": "^3.0.8",
+    "joi": "^17.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": ["nodejs", "express", "real-estate", "api", "backend"],
+  "author": "Focus Property",
+  "license": "MIT"
+}

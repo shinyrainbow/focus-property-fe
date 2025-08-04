@@ -1,0 +1,161 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+}
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
+ 
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([userId, credentialID])
+}
+// An enum to define the type of property listing (e.g., for sale, for rent)
+enum ListingType {
+  sale
+  rent
+}
+
+// An enum to define the status of the property listing
+enum PropertyStatus {
+  available
+  pending
+  sold
+  rented
+}
+
+// An enum to define the type of property (e.g., condo, house, land)
+enum PropertyType {
+  condo
+  house
+  land
+  townhouse
+}
+
+model Property {
+  // Use a UUID for the unique identifier of the property.
+  id          String         @id @default(uuid())
+  // The title of the property listing.
+  title       String
+  // A detailed description of the property.
+  description String
+  // The type of listing (e.g., sale or rent).
+  listingType ListingType
+  // The price of the property, using Decimal for precision.
+  price       Decimal
+  // The location of the property.
+  location    String
+  // The type of property (e.g., condo, house).
+  propertyType PropertyType
+  // The number of bedrooms.
+  bedrooms    Int
+  // The number of bathrooms.
+  bathrooms   Int
+  // The area of the property in square meters.
+  area        Float
+  // The floor number or description (e.g., "15A").
+  floor       String
+  // A string of amenities, separated by commas.
+  amenities   String
+  // The contact information.
+  contact     String
+  // The current status of the property listing.
+  status      PropertyStatus @default(available)
+  // The number of views the listing has received.
+  views       Int            @default(0)
+  // The ID of the user who created this listing.
+  userId      String
+  // The creation timestamp, set automatically.
+  createdAt   DateTime       @default(now())
+  // The last update timestamp, set automatically on every update.
+  updatedAt   DateTime       @updatedAt
+
+  // A relationship field connecting this property to its owner (the User model).
+  // user        User           @relation(fields: [userId], references: [id])
+  // A relationship to the images associated with this property.
+  images      Image[]
+}
+
+// The Image model stores the URLs for property images.
+model Image {
+  // Use a UUID for the unique identifier of the image.
+  id          String   @id @default(uuid())
+  // The URL of the image.
+  url         String
+  // The ID of the property this image belongs to.
+  propertyId  String
+  // A relationship field connecting this image back to the Property model.
+  property    Property @relation(fields: [propertyId], references: [id])
+}
