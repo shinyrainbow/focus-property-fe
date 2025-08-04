@@ -72,13 +72,6 @@ export default function AddPropertyPage() {
     }))
   }
 
-  const [files, setFiles] = useState([]);
-  const [uploading, setUploading] = useState(false);
-const handleFileChange = (e) => {
-  setFiles(Array.from(e.target.files));
-};
-
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitting(true)
