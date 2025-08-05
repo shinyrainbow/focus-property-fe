@@ -27,6 +27,6 @@ jobs:
       - name: Pull image from docker hub
         run: docker pull kliengsaengt/focus-property-fe:latest
       - name: Delete old container
-        run: docker rm -f nextjs-app-container  
+        run: docker rm -f focus-property-fe-container  
       - name: Run docker container
-        run: docker run -d -p 3000:3000 --name nextjs-app-container kliengsaengt/focus-property-fe 
+        run: docker run -d -p 3000:3000 --name focus-property-fe-container kliengsaengt/focus-property-fe 
