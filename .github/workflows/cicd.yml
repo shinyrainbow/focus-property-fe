@@ -19,8 +19,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Publish image to docker hub
         run: docker push kliengsaengt/focus-property-fe:latest
-      - name: Connect rds
-        run: docker run --rm -it postgres psql -h focus-property-fe-rds.crmyeocekssj.ap-southeast-1.rds.amazonaws.com -U postgres -W focus
+      
   deploy:
     needs: build
     runs-on: self-hosted
